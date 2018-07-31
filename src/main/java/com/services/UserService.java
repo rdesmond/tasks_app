@@ -1,5 +1,6 @@
 package com.services;
 
+import com.exceptions.CustomDatabaseException;
 import com.model.User;
 import com.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,5 +54,31 @@ public class UserService {
             throw e;
         }
 
+    }
+
+    public User updateUser(User user) throws CustomDatabaseException {
+
+        try {
+            int i = userRepository.updateUser(user.getFirst_name(), user.getFirst_name(), user.getEmail(), user.getId());
+
+            if (i < 1) {
+                throw new CustomDatabaseException("Unable to update User");
+            }
+
+            return userRepository.findOne(user.getId());
+
+        } catch (Exception e){
+            throw new CustomDatabaseException(e.getMessage());
+        }
+    }
+
+    public boolean deleteUser(long id) throws Exception{
+
+        try {
+            userRepository.delete(id);
+            return true;
+        } catch (Exception e){
+            throw e;
+        }
     }
 }

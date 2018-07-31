@@ -20,6 +20,18 @@ public class GlobalExceptionHandler {
         CustomResponseObject response = new CustomResponseObject();
         ExceptionPojo error = new ExceptionPojo(ex.getMessage());
         response.setError(error);
+        response.setStatusCode(500);
+
+        return response;
+    }
+
+    @ExceptionHandler(CustomDatabaseException.class)
+    public @ResponseBody CustomResponseObject handleDatabaseError(HttpServletRequest req, CustomDatabaseException ex) {
+
+        CustomResponseObject response = new CustomResponseObject();
+        ExceptionPojo error = new ExceptionPojo(ex.getMessage());
+        response.setError(error);
+        response.setStatusCode(500);
 
         return response;
     }

@@ -1,5 +1,6 @@
 package com.controllers;
 
+import com.exceptions.CustomDatabaseException;
 import com.model.CustomResponseObject;
 import com.model.User;
 import com.services.UserService;
@@ -23,7 +24,7 @@ public class UserController {
     public CustomResponseObject<List<User>> getUsers() throws Exception {
 
         List<User> users = userService.findAllUsers();
-        CustomResponseObject obj = new CustomResponseObject();
+        CustomResponseObject<List<User>> obj = new CustomResponseObject();
         obj.setData(users);
         obj.setStatusCode(200);
 
@@ -35,7 +36,7 @@ public class UserController {
     public CustomResponseObject<User> findUserById(@PathVariable("id") long id) throws Exception {
         User user = userService.findUserById(id);
 
-        CustomResponseObject obj = new CustomResponseObject();
+        CustomResponseObject<User> obj = new CustomResponseObject();
         obj.setData(user);
         obj.setStatusCode(200);
 
@@ -48,13 +49,38 @@ public class UserController {
 
         User u = userService.createUser(user);
 
-        CustomResponseObject obj = new CustomResponseObject();
+        CustomResponseObject<User> obj = new CustomResponseObject();
         obj.setData(user);
         obj.setStatusCode(200);
 
         return obj;
     }
 
+    @PutMapping
+    public CustomResponseObject<User> updateUser(@Valid @RequestBody User user) throws CustomDatabaseException {
 
+        User u = userService.updateUser(user);
+
+        CustomResponseObject<User> obj = new CustomResponseObject();
+        obj.setData(user);
+        obj.setStatusCode(200);
+
+        return obj;
+    }
+
+    @DeleteMapping("/{id}")
+    public CustomResponseObject<String> deleteUser(@PathVariable("id") long id) throws Exception {
+
+        boolean success = userService.deleteUser(id);
+
+        CustomResponseObject<String> obj = new CustomResponseObject();
+        if (success){
+            obj.setData("User Successfully Deleted");
+            obj.setStatusCode(200);
+            return obj;
+        }
+
+        throw new CustomDatabaseException("Unable to delete user");
+    }
 
 }

@@ -7,6 +7,7 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 /**
@@ -21,6 +22,10 @@ public class Task {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column
+    @NotNull
+    private Long userId;
 
     @NotBlank(message = "title MUST NOT BE NULL!!!!!")
     private String name;
@@ -38,7 +43,8 @@ public class Task {
     @LastModifiedDate
     private Date updatedAt;
 
-    boolean completed;
+    @Column
+    private boolean completed;
 
     public Long getId() {
         return id;
@@ -46,6 +52,14 @@ public class Task {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public Long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
 
     public String getName() {
